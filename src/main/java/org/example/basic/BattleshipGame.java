@@ -27,6 +27,7 @@ class BattleshipGame {
     private char[][] board; // 2D array representing  the game board
     private List<Ship> ships; // List to store the ships
     private int misses = 0; // Count of misses
+    private int sunkCnt = 0;
 
     // Constructor
     public BattleshipGame() {
@@ -47,9 +48,9 @@ class BattleshipGame {
 
     // Place ships on the board(Auto) - Add Ships: Carrier(5), Battleship(4), Destroyer(3)
     private void placeAllShips() {
-        placeShip(new Ship("Carrier", 5));
-        placeShip(new Ship("Battleship", 3));
-        placeShip(new Ship("Destroyer", 4));
+        placeShip(new Ship("Carrier", 1));
+        placeShip(new Ship("Battleship", 1));
+        placeShip(new Ship("Destroyer", 1));
     }
 
     // Place a single ship on the board
@@ -110,6 +111,7 @@ class BattleshipGame {
             hitShip.hitCount++;
 
             if(hitShip.isSunk()) {
+                sunkCnt++;
                 return "Sunk " + hitShip.name;
             }
             return "Hit " + hitShip.name;
@@ -131,10 +133,14 @@ class BattleshipGame {
             return true;
         }
 
-        for(Ship ship : ships) {
-            if(!ship.isSunk()) {
-                return false;
-            }
+        // If the number of ships increases, the time complexity worsens
+//        for(Ship ship : ships) {
+//            if(!ship.isSunk()) {
+//                return false;
+//            }
+//        }
+        if(sunkCnt < ships.toArray().length) {
+            return false;
         }
         System.out.println("You Win. Game over!");
         return true;
